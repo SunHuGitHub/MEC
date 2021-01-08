@@ -55,9 +55,9 @@ public class Runner {
      */
     static List<Integer> idOfEndDevices = new ArrayList<>();
 
-    static Map<Integer, Map<String, Double>> deadlineInfo = new HashMap<>();
-
-    static Map<Integer, Map<String, Integer>> additionalMipsInfo = new HashMap<>();
+//    static Map<Integer, Map<String, Double>> deadlineInfo = new HashMap<>();
+//
+//    static Map<Integer, Map<String, Integer>> additionalMipsInfo = new HashMap<>();
 
     /**
      * 感应间隔
@@ -84,6 +84,7 @@ public class Runner {
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("storageModule", "mecServer");
+            moduleMapping.addModuleToDevice("mainModule", "mecServer");
             // 循环给每个终端设备（移动设备）设置 虚拟机
             for (Integer idOfEndDevice : idOfEndDevices) {
                 FogDevice fogDevice = deviceById.get(idOfEndDevice);
@@ -92,7 +93,7 @@ public class Runner {
             }
             Controller controller = new Controller("master-controller", fogDevices, sensors, actuators);
 
-            controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping, "mainModule"));
+            controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping, "clientModule"));
 
             TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
 
@@ -130,14 +131,14 @@ public class Runner {
         application.addTupleMapping("clientModule", "ResultData", "Response", new FractionalSelectivity(1.0));
 
         // 给终端设备 设置 时延期限 和 额外的计算要求  这里暂且不知是干什么用的。
-        for (int id : idOfEndDevices) {
-            Map<String, Double> moduleDeadline = new HashMap<>();
-            moduleDeadline.put("mainModule", getValue(3.00, 5.00));
-            Map<String, Integer> moduleAddMips = new HashMap<>();
-            moduleAddMips.put("mainModule", getValue(0, 300));
-            deadlineInfo.put(id, moduleDeadline);
-            additionalMipsInfo.put(id, moduleAddMips);
-        }
+//        for (int id : idOfEndDevices) {
+//            Map<String, Double> moduleDeadline = new HashMap<>();
+//            moduleDeadline.put("mainModule", getValue(3.00, 5.00));
+//            Map<String, Integer> moduleAddMips = new HashMap<>();
+//            moduleAddMips.put("mainModule", getValue(0, 300));
+//            deadlineInfo.put(id, moduleDeadline);
+//            additionalMipsInfo.put(id, moduleAddMips);
+//        }
 
         // 这里控制一个任务从开始到结束的完整流向
         final AppLoop loop1 = new AppLoop(new ArrayList<String>() {{
@@ -154,8 +155,6 @@ public class Runner {
 
         application.setLoops(loops);
 
-        application.setDeadlineInfo(deadlineInfo);
-        application.setAdditionalMipsInfo(additionalMipsInfo);
         return application;
     }
 
