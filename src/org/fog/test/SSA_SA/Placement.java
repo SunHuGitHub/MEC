@@ -29,15 +29,15 @@ public abstract class Placement {
 
     protected  abstract void mapModules();
 
-    protected boolean canBeCreated(FogDevice fogDevice,AppModule appModule){
-        return fogDevice.getVmAllocationPolicy().allocateHostForVm(appModule);
+    protected boolean canBeCreated(FogDevice fogDevice, AppModule module){
+        return fogDevice.getVmAllocationPolicy().allocateHostForVm(module);
     }
 
     protected int getParentDevice(int fogDeviceId){
-        return ((FogDevice) CloudSim.getEntity(fogDeviceId)).getParentId();
+        return ((FogDevice)CloudSim.getEntity(fogDeviceId)).getParentId();
     }
 
-    protected FogDevice getMyFogDeviceById(int fogDeviceId){
+    protected FogDevice getFogDeviceById(int fogDeviceId){
         return (FogDevice)CloudSim.getEntity(fogDeviceId);
     }
 
@@ -45,25 +45,25 @@ public abstract class Placement {
         return false;
     }
 
-    protected boolean createModuleInstanceOnDevice(AppModule _module,final FogDevice device){
-        AppModule module=null;
-        if (getModuleToDeviceMap().containsKey(_module.getName())){
-            module=new AppModule(_module);
-        }else{
-            module=_module;
-        }
-        if (canBeCreated(device,module)){
+    protected boolean createModuleInstanceOnDevice(AppModule _module, final FogDevice device){
+        AppModule module = null;
+        if(getModuleToDeviceMap().containsKey(_module.getName()))
+            module = new AppModule(_module);
+        else
+            module = _module;
+
+        if(canBeCreated(device, module)){
             System.out.println("Creating "+module.getName()+" on device "+device.getName());
-            if (!getDeviceToModuleMap().containsKey(device.getId())){
-                getDeviceToModuleMap().put(device.getId(),new ArrayList<>());
-            }
+
+            if(!getDeviceToModuleMap().containsKey(device.getId()))
+                getDeviceToModuleMap().put(device.getId(), new ArrayList<AppModule>());
             getDeviceToModuleMap().get(device.getId()).add(module);
-            if (!getModuleToDeviceMap().containsKey(module.getName())){
-                getModuleToDeviceMap().put(module.getName(),new ArrayList<>());
-            }
+
+            if(!getModuleToDeviceMap().containsKey(module.getName()))
+                getModuleToDeviceMap().put(module.getName(), new ArrayList<Integer>());
             getModuleToDeviceMap().get(module.getName()).add(device.getId());
             return true;
-        }else {
+        } else {
             System.err.println("Module "+module.getName()+" cannot be created on device "+device.getName());
             System.err.println("Terminating");
             return false;
