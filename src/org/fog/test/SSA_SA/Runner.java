@@ -84,6 +84,7 @@ public class Runner {
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("storageModule", "mecServer");
+            //这里把 mainModule 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("mainModule", "mecServer");
             // 循环给每个终端设备（移动设备）设置 虚拟机
             for (Integer idOfEndDevice : idOfEndDevices) {

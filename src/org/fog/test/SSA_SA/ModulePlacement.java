@@ -31,7 +31,7 @@ public  class ModulePlacement extends Placement {
      */
     protected List<Actuator> actuators;
     /**
-     * 放置的模块
+     * 放置的模块（虚拟机）
      */
     protected String moduleToPlace;
     /**
