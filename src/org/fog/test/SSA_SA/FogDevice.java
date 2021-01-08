@@ -14,8 +14,6 @@ import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.AppModule;
-import org.fog.application.Application;
-import org.fog.entities.Actuator;
 import org.fog.entities.FogDeviceCharacteristics;
 import org.fog.entities.Tuple;
 import org.fog.policy.AppModuleAllocationPolicy;
