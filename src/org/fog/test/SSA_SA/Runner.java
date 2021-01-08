@@ -89,10 +89,15 @@ public class Runner {
                 //给每个 移动设备 分配了一个 clientModule（客户端虚拟机）
                 moduleMapping.addModuleToDevice("clientModule", fogDevice.getName());
             }
+            Controller controller = new Controller("master-controller", fogDevices, sensors, actuators);
 
         } catch (Exception e) {
+
+
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args) throws Exception {
 
     }
 
@@ -238,10 +243,4 @@ public class Runner {
         }
         return fogdevice;
     }
-
-
-    public static void main(String[] args) throws Exception {
-
-    }
-
 }

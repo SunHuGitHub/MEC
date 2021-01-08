@@ -4,13 +4,15 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.core.SimEvent;
 import org.fog.application.AppLoop;
-import org.fog.application.Application;
 import org.fog.entities.Tuple;
 import org.fog.utils.FogEvents;
 import org.fog.utils.GeoLocation;
 import org.fog.utils.Logger;
 import org.fog.utils.TimeKeeper;
-
+/**
+ * @author Tiger
+ * @date 2021/1/8 10:12
+ */
 public class Actuator extends SimEntity{
 
 	private int gatewayDeviceId;

@@ -6,13 +6,15 @@ import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
-import org.fog.application.Application;
 import org.fog.entities.Tuple;
 import org.fog.utils.*;
 import org.fog.utils.distribution.Distribution;
 
 import java.util.ArrayList;
-
+/**
+ * @author Tiger
+ * @date 2021/1/8 09:48
+ */
 public class Sensor extends SimEntity{
 	
 	private int gatewayDeviceId;
