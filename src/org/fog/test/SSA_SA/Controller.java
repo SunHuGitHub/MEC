@@ -6,7 +6,6 @@ import org.cloudbus.cloudsim.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.AppModule;
-import org.fog.placement.ModulePlacement;
 import org.fog.utils.*;
 
 import java.util.Calendar;

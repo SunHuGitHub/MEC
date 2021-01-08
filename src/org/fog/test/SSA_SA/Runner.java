@@ -19,6 +19,7 @@ import org.fog.policy.AppModuleAllocationPolicy;
 import org.fog.scheduler.StreamOperatorScheduler;
 import org.fog.utils.FogLinearPowerModel;
 import org.fog.utils.FogUtils;
+import org.fog.utils.TimeKeeper;
 import org.fog.utils.distribution.DeterministicDistribution;
 
 import java.util.*;
@@ -91,12 +92,18 @@ public class Runner {
             }
             Controller controller = new Controller("master-controller", fogDevices, sensors, actuators);
 
+            controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping, "mainModule"));
+
+            TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
+
+            CloudSim.startSimulation();
+
+            CloudSim.stopSimulation();
         } catch (Exception e) {
-
-
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) throws Exception {
 
     }
