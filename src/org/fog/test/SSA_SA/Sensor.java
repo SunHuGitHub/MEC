@@ -61,7 +61,7 @@ public class Sensor extends SimEntity{
 	 */
 	private Application app;
 	/**
-	 * 延迟
+	 * 延迟 具体这个延迟干什么用，暂且还不知，看到代码再说
 	 */
 	private double latency;
 	

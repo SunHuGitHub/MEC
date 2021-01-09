@@ -46,12 +46,14 @@ public class Controller extends SimEntity {
         this.applications = new HashMap<String, Application>();
         setAppLaunchDelays(new HashMap<String, Integer>());
         setAppModulePlacementPolicy(new HashMap<String, ModulePlacement>());
+        //每个 设备 保存 Controller ID
         for (FogDevice fogDevice : fogDevices) {
             fogDevice.setControllerId(getId());
         }
         setFogDevices(fogDevices);
         setActuators(actuators);
         setSensors(sensors);
+        //初始化 父子设备的关系 里面使用了两个map  一个保存子设备的ID 一个保存子设备的延迟
         connectWithLatencies();
     }
 
@@ -65,11 +67,14 @@ public class Controller extends SimEntity {
 
     private void connectWithLatencies() {
         for (FogDevice fogDevice : getFogDevices()) {
+            //拿到父节点
             FogDevice parent = getFogDeviceById(fogDevice.getParentId());
             if (parent == null)
                 continue;
             double latency = fogDevice.getUplinkLatency();
+            //父节点保存子设备延迟
             parent.getChildToLatencyMap().put(fogDevice.getId(), latency);
+            //父节点保存子设备ID
             parent.getChildrenIds().add(fogDevice.getId());
         }
     }
@@ -207,12 +212,14 @@ public class Controller extends SimEntity {
         for (Actuator ac : actuators) {
             ac.setApp(getApplications().get(ac.getAppId()));
         }
-
+        //循环拿到每条边
         for (AppEdge edge : application.getEdges()) {
             if (edge.getEdgeType() == AppEdge.ACTUATOR) {
                 String moduleName = edge.getSource();
+                // 循环遍历 执行器 判断执行器里 actuatorType属性 是否与 边的目的地相等
                 for (Actuator actuator : getActuators()) {
                     if (actuator.getActuatorType().equalsIgnoreCase(edge.getDestination()))
+                        //拿到名字为 edge.getSource() 的虚拟机
                         application.getModuleByName(moduleName).subscribeActuator(actuator.getId(), edge.getTupleType());
                 }
             }

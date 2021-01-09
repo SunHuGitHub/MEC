@@ -80,6 +80,7 @@ public class Runner {
             Application application = createApplication(appId, broker.getId());
             application.setUserId(broker.getId());
 
+            //虚拟机与设备之间的映射关系
             ModuleMapping moduleMapping = ModuleMapping.createModuleMapping();
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
@@ -92,6 +93,7 @@ public class Runner {
                 //给每个 移动设备 分配了一个 clientModule（客户端虚拟机）
                 moduleMapping.addModuleToDevice("clientModule", fogDevice.getName());
             }
+            // 这里把 fogDevices sensors actuators 注册进 controller
             Controller controller = new Controller("master-controller", fogDevices, sensors, actuators);
 
             controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping, "clientModule"));
@@ -120,7 +122,7 @@ public class Runner {
 
         //三种虚拟机之间的依赖关系  这里的关系 是用 边（AppEdge） 来表示的  看图 placement policy.png
         /*从 source -> destination 这里 source 为 IoTSensor 容易跟 tupleType 为 IoTSensor 造成误解
-           这里其实叫什么都行 他这里是从逻辑上来说的 因为逻辑上就是从传感器到虚拟机。这条边主要传输任务类型为 IoTSensor 的数据
+           这里其实叫什么都行 他这里是从逻辑上来说的 因为逻辑上就是从传感器到虚拟机。tupleType表示这条边主要传输任务类型为 IoTSensor 的数据
         */
         application.addAppEdge("IoTSensor", "clientModule", 100, 200, "IoTSensor", Tuple.UP, AppEdge.SENSOR);
         application.addAppEdge("clientModule", "mainModule", 6000, 600, "RawData", Tuple.UP, AppEdge.MODULE);
