@@ -22,26 +22,37 @@ import java.util.Map;
  * @author Harshit Gupta
  */
 public class Application {
-
+    /**
+     * 逻辑架构图 唯一标识
+     */
     private String appId;
+    /**
+     * 用户id
+     */
     private int userId;
+    /**
+     * 地理位置  用来记录用户移动的情况 里面保存经纬度等信息
+     *  看到这里 让我想到 redis的 GEO 他可以用来保存地理位置 查找附近的位置
+     */
     private GeoCoverage geoCoverage;
 
     /**
-     * List of application modules in the application
+     * 虚拟机配置表
      */
     private List<AppModule> modules;
 
     /**
-     * List of application edges in the application
+     * 虚拟机之间的关系
      */
     private List<AppEdge> edges;
 
     /**
-     * List of application loops to monitor for delay
+     * 任务的完整流向
      */
     private List<AppLoop> loops;
-
+    /**
+     * AppEdge的映射关系  key 是 tupleType  value 是 AppEdge
+     */
     private Map<String, AppEdge> edgeMap;
 
     private Map<Integer, Map<String, Double>> deadlineInfo;
@@ -69,6 +80,7 @@ public class Application {
         String vmm = "Xen";
         AppModule module = new AppModule(FogUtils.generateEntityId(),
                 moduleName, appId, userId,
+                //new TupleScheduler(mips, 1) 这两个个参数没用 根本就没有初始化 等同于new TupleScheduler()
                 mips, ram, bw, size, vmm, new TupleScheduler(mips, 1),
                 new HashMap<Pair<String, String>, SelectivityModel>());
 

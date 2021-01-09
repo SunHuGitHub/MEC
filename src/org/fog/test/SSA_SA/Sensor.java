@@ -16,18 +16,53 @@ import java.util.ArrayList;
  * @date 2021/1/8 09:48
  */
 public class Sensor extends SimEntity{
-	
+	/**
+	 * 网关设备ID  这个ID表示 Sensor 的上层设备是谁 即 任务传给谁
+	 */
 	private int gatewayDeviceId;
+	/**
+	 * 地理位置
+	 */
 	private GeoLocation geoLocation;
+	/**
+	 * 任务输出大小
+	 */
 	private long outputSize;
+	/**
+	 * 逻辑架构图ID
+	 */
 	private String appId;
+	/**
+	 * 用户ID
+	 */
 	private int userId;
+	/**
+	 * 元组类型（任务类型）
+	 */
 	private String tupleType;
+	/**
+	 * 传感器名称
+	 */
 	private String sensorName;
+	/**
+	 * 目标虚拟机名称
+	 */
 	private String destModuleName;
+	/**
+	 * 传输分布？
+	 */
 	private Distribution transmitDistribution;
+	/**
+	 * controller ID  控制器ID
+	 */
 	private int controllerId;
+	/**
+	 * 逻辑架构图
+	 */
 	private Application app;
+	/**
+	 * 延迟
+	 */
 	private double latency;
 	
 	public Sensor(String name, int userId, String appId, int gatewayDeviceId, double latency, GeoLocation geoLocation, 

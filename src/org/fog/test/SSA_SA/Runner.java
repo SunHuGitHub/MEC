@@ -84,7 +84,7 @@ public class Runner {
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("storageModule", "mecServer");
-            //这里把 mainModule 放到了 之前初始化的 边缘服务器上
+            //这里把 mainModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("mainModule", "mecServer");
             // 循环给每个终端设备（移动设备）设置 虚拟机
             for (Integer idOfEndDevice : idOfEndDevices) {
@@ -113,12 +113,15 @@ public class Runner {
     private static Application createApplication(String appId, int userId) {
 
         Application application = Application.createApplication(appId, userId);
-        //初始化三种虚拟机配置
+        //初始化三种虚拟机配置  内存，每秒可以处理的百万指令数，大小？，带宽
         application.addAppModule("clientModule", 10, 1000, 1000, 100);
         application.addAppModule("mainModule", 50, 1500, 4000, 800);
         application.addAppModule("storageModule", 10, 50, 12000, 100);
 
-        //三种虚拟机之间的关系  这里的关系 是用 边（edge） 来表示的  看图 placement policy.png
+        //三种虚拟机之间的依赖关系  这里的关系 是用 边（AppEdge） 来表示的  看图 placement policy.png
+        /*从 source -> destination 这里 source 为 IoTSensor 容易跟 tupleType 为 IoTSensor 造成误解
+           这里其实叫什么都行 他这里是从逻辑上来说的 因为逻辑上就是从传感器到虚拟机。这条边主要传输任务类型为 IoTSensor 的数据
+        */
         application.addAppEdge("IoTSensor", "clientModule", 100, 200, "IoTSensor", Tuple.UP, AppEdge.SENSOR);
         application.addAppEdge("clientModule", "mainModule", 6000, 600, "RawData", Tuple.UP, AppEdge.MODULE);
         application.addAppEdge("mainModule", "storageModule", 1000, 300, "StoreData", Tuple.UP, AppEdge.MODULE);
@@ -193,7 +196,7 @@ public class Runner {
         ue.setParentId(mecServer.getId());
         idOfEndDevices.add(ue.getId());
 
-        //初始化 感应器
+        //初始化 传感器
         Sensor sensor = new Sensor("ue-Sensor", "IoTSensor", userId, appId, new DeterministicDistribution(sensingInterval));
         sensors.add(sensor);
         sensor.setGatewayDeviceId(ue.getId());

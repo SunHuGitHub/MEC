@@ -6,6 +6,13 @@ import java.util.Map;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.UtilizationModel;
 
+/**
+ * Tuple 边缘计算任务类
+ * 元组构成雾中实体之间通信的基本单元，并在体系结构中实现数据流层。
+ * 元组在iFogSim中表示为元组类的实例，该类继承自CloudSim的 Cloudlet类。
+ * 元组的特征在于其类型以及源和目标应用程序模块。
+ * 该类的属性指定处理要求[定义为百万指令（MI）]和封装在元组中的数据长度。
+ */
 public class Tuple extends Cloudlet{
 
 	public static final int UP = 1;

@@ -195,10 +195,12 @@ public class Controller extends SimEntity {
         FogUtils.appIdToGeoCoverageMap.put(application.getAppId(), application.getGeoCoverage());
         //把之前的 生成的 系统逻辑架构图 放进来
         getApplications().put(application.getAppId(), application);
-
+        //加入延迟
         getAppLaunchDelays().put(application.getAppId(), delay);
+        //加入放置策略
         getAppModulePlacementPolicy().put(application.getAppId(), modulePlacement);
 
+        // 给 监听器 和 执行器 设置逻辑架构图
         for (Sensor sensor : sensors) {
             sensor.setApp(getApplications().get(sensor.getAppId()));
         }
