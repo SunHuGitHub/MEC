@@ -479,6 +479,7 @@ public class CloudSim {
 		}
 		if (e.getId() == -1) { // Only add once!
 			int id = entities.size();
+			//在这里给每个设备设置的ID ID是 entities 容器的size
 			e.setId(id);
 			entities.add(e);
 			entitiesByName.put(e.getName(), e);

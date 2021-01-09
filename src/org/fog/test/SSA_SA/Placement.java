@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * @author Tiger
  * @date 2021/1/8 10:33
+ * 这个类其实就是 org.fog.placement.ModulePlacement
  */
 @Getter
 @Setter

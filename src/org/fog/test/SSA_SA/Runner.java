@@ -80,13 +80,14 @@ public class Runner {
             Application application = createApplication(appId, broker.getId());
             application.setUserId(broker.getId());
 
-            //虚拟机与设备之间的映射关系
+            //保存虚拟机与设备之间的映射关系  真正的虚拟机与设备分配关系 是在 ModulePlacement 里的 mapModules()方法
             ModuleMapping moduleMapping = ModuleMapping.createModuleMapping();
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("storageModule", "mecServer");
             //这里把 mainModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("mainModule", "mecServer");
+
             // 循环给每个终端设备（移动设备）设置 虚拟机
             for (Integer idOfEndDevice : idOfEndDevices) {
                 FogDevice fogDevice = deviceById.get(idOfEndDevice);
@@ -160,7 +161,8 @@ public class Runner {
         }};
 
         application.setLoops(loops);
-
+//        application.setDeadlineInfo(deadlineInfo);
+//        application.setAdditionalMipsInfo(additionalMipsInfo);
         return application;
     }
 
@@ -184,7 +186,7 @@ public class Runner {
         //初始化 边缘服务器
         FogDevice mecServer = createFogDevice("mecServer", 44800, 40000, 100, 10000, 0, 0.01, 16 * 103, 16 * 83.25);
 
-        mecServer.setParentId(-1);
+        mecServer.setParentId(Integer.MIN_VALUE);
         fogDevices.add(mecServer);
         deviceById.put(mecServer.getId(), mecServer);
 

@@ -8,6 +8,7 @@ import java.util.Map;
 public class ModuleMapping {
 	/**
 	 * Mapping from node name to list of <moduleName, numInstances> of instances to be launched on node
+	 * key 是 设备名称  value 是 虚拟机名称  意味着 我一个设备上 可以 放置多个虚拟机
 	 */
 	protected Map<String, List<String>> moduleMapping;
 	

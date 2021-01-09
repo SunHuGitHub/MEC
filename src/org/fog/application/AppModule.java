@@ -36,6 +36,7 @@ public class AppModule extends PowerVm{
 	
 	/**
 	 * Mapping from tupleType emitted by this AppModule to Actuators subscribing to that tupleType
+	 * key 是 任务类型 value 是 执行器ID  即 将多个执行器 与 某个任务 绑定在一起 供以后使用
 	 */
 	private Map<String, List<Integer>> actuatorSubscriptions;
 	

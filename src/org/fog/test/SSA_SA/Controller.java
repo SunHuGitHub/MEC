@@ -219,7 +219,8 @@ public class Controller extends SimEntity {
                 // 循环遍历 执行器 判断执行器里 actuatorType属性 是否与 边的目的地相等
                 for (Actuator actuator : getActuators()) {
                     if (actuator.getActuatorType().equalsIgnoreCase(edge.getDestination()))
-                        //拿到名字为 edge.getSource() 的虚拟机
+                        //拿到名字为 edge.getSource() 的虚拟机 设置 执行器 与 任务 的多对一关系
+                        // 这里的意图应该是任务到这个虚拟机执行完后  通知多个 执行器 来获取结果
                         application.getModuleByName(moduleName).subscribeActuator(actuator.getId(), edge.getTupleType());
                 }
             }
