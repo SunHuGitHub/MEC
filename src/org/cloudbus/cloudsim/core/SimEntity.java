@@ -292,11 +292,12 @@ public abstract class SimEntity implements Cloneable {
 
 	/**
 	 * Count how many events matching a predicate are waiting in the entity's deferred queue.
-	 * 
+	 * 计算与该匹配策略匹配的事件在实体的延迟队列中等待的数量。
 	 * @param p The event selection predicate
 	 * @return The count of matching events
 	 */
 	public int numEventsWaiting(Predicate p) {
+		//计算这个实体中延迟队列中的事件数量
 		return CloudSim.waiting(id, p);
 	}
 
@@ -348,7 +349,9 @@ public abstract class SimEntity implements Cloneable {
 		if (!CloudSim.running()) {
 			return null;
 		}
+		//拿到等待数量
 		if (numEventsWaiting(p) > 0) {
+			//拿到第一个等待事件
 			return selectEvent(p);
 		}
 		return null;
@@ -376,6 +379,7 @@ public abstract class SimEntity implements Cloneable {
 	 * @return the simulation event
 	 */
 	public SimEvent getNextEvent() {
+		//从DeferredQueue中获取第一个事件  匹配策略是所有事件 即没有任何过滤策略
 		return getNextEvent(CloudSim.SIM_ANY);
 	}
 
@@ -400,6 +404,7 @@ public abstract class SimEntity implements Cloneable {
 	public abstract void shutdownEntity();
 
 	public void run() {
+		//如果是第一次进来这个方法  getNextEvent() 都是 null
 		SimEvent ev = evbuf != null ? evbuf : getNextEvent();
 
 		while (ev != null) {

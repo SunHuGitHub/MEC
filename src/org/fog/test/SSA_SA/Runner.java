@@ -65,6 +65,7 @@ public class Runner {
     static double sensingInterval = 5;
 
     static {
+        //这里面 new 了 一个 CloudSimShutdown 对象 以及 CloudInformationService 对象
         CloudSim.init(1, Calendar.getInstance(), false);
 
         String appId = "SSA-SA";
@@ -97,10 +98,28 @@ public class Runner {
             // 这里把 fogDevices sensors actuators 注册进 controller
             Controller controller = new Controller("master-controller", fogDevices, sensors, actuators);
 
-            controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping, "clientModule"));
-
+            controller.submitApplication(application, 0, new ModulePlacement(fogDevices, sensors, actuators, application, moduleMapping));
+            //设置启动时间
             TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
 
+            /*调用链：startSimulation()->run()->runStart()->{
+                    CloudSimShutdown.startEntity() -->空方法
+                    CloudInformationService.startEntity() -->空方法
+                    FogBroker.startEntity() -->空方法
+        FogDevice.startEntity() --> DataCenter.startEntity()->一大堆send()方法->CloudSim.send()方法->最终往 FutureQueue 里的sortedset 加入了一个 SimEvent 事件
+                    Sensor.startEntity() --> 调了两个send()方法->最终调的都是CloudSim.send()方法->封装成SimEvent事件 放入 FutureQueue
+                    Actuator.startEntity() -->调了sendNow()方法->最终。。。。。跟上面一样
+                    Controller.startEntity() -->发出设备激活，虚拟机激活事件
+                    最终 CloudSim.FutureQueue.SortSet里事件数量是固定的（1、FogDevice资源注册事件（你有几个FogDevice就有几个）+
+                    2、Sensor加入事件和任务进入事件（每有一个Sensor都有这两个事件）+
+                    3、Actuator加入事件（每有一个Actuator都有这一个事件）+
+                    4、Controller里事件比较多（FogDevice设备激活事件），你有几个FogDevice就有几个激活事件、（虚拟机提交事件、虚拟机启动事件），设备上每有一个虚拟机就会有这两个事件、
+                    （controller资源管理事件）、（结束模拟事件）、（FogDevice资源管理事件）你有几个FogDevice就有几个。
+                    举例，一个mecServer + 一个ue + 一个Sensor + 一个 Actuator （mainModule,storageModule分给mecServer，clientModule分给 ue）
+                    共有：2 + 2（Sensor） + 1（Actuator） + 2 + （2 * 2 + 2）+ 1 + 1 + 2 = 17
+            }->
+
+            */
             CloudSim.startSimulation();
 
             CloudSim.stopSimulation();
@@ -137,7 +156,7 @@ public class Runner {
         application.addTupleMapping("mainModule", "RawData", "StoreData", new FractionalSelectivity(1.0));
         application.addTupleMapping("clientModule", "ResultData", "Response", new FractionalSelectivity(1.0));
 
-        // 给终端设备 设置 时延期限 和 额外的计算要求  这里暂且不知是干什么用的。
+        // 给终端设备 设置 时延期限 和 额外的计算要求  这里是为了之后分配虚拟机策略所用 没啥用 你也可以写你自己的
 //        for (int id : idOfEndDevices) {
 //            Map<String, Double> moduleDeadline = new HashMap<>();
 //            moduleDeadline.put("mainModule", getValue(3.00, 5.00));

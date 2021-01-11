@@ -157,7 +157,11 @@ public class Sensor extends SimEntity {
 
     @Override
     public void startEntity() {
+        //点进去调的也是 SimEntity.send方法 最终 调用CloudSim.send方法 生成一个SimEvent事件放入 CloudSim里的future
+        //    父 id                   0.1 事件之间的间隔               感应器加入事件           地理位置--null 这里作为data传了进去
         send(gatewayDeviceId, CloudSim.getMinTimeBetweenEvents(), FogEvents.SENSOR_JOINED, geoLocation);
+        //   感应器id        传输间隔 我们在 new Sensor 时传的             任务加入事件
+        // 这里的 send方法 没传 data  猜测这里我们可以修改 帮我们的任务传进去
         send(getId(), getTransmitDistribution().getNextValue(), FogEvents.EMIT_TUPLE);
     }
 

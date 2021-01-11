@@ -53,7 +53,7 @@ public class Controller extends SimEntity {
         setFogDevices(fogDevices);
         setActuators(actuators);
         setSensors(sensors);
-        //初始化 父子设备的关系 里面使用了两个map  一个保存子设备的ID 一个保存子设备的延迟
+        //初始化父子设备的关系 里面使用了两个map  一个保存子设备的ID 一个保存子设备的延迟
         connectWithLatencies();
     }
 
@@ -81,17 +81,20 @@ public class Controller extends SimEntity {
 
     @Override
     public void startEntity() {
+        //咱们只有一个Application
         for (String appId : applications.keySet()) {
             if (getAppLaunchDelays().get(appId) == 0)
+                //方法里发出 设备激活 虚拟机激活事件
                 processAppSubmit(applications.get(appId));
             else
                 send(getId(), getAppLaunchDelays().get(appId), FogEvents.APP_SUBMIT, applications.get(appId));
         }
-
+        //controller资源管理事件
         send(getId(), Config.RESOURCE_MANAGE_INTERVAL, FogEvents.CONTROLLER_RESOURCE_MANAGE);
-
+        //结束模拟事件
         send(getId(), Config.MAX_SIMULATION_TIME, FogEvents.STOP_SIMULATION);
 
+        //FogDevice资源管理事件
         for (FogDevice dev : getFogDevices())
             sendNow(dev.getId(), FogEvents.RESOURCE_MGMT);
 
@@ -197,6 +200,7 @@ public class Controller extends SimEntity {
     }
 
     public void submitApplication(Application application, int delay, ModulePlacement modulePlacement) {
+        //这里是加入 地理位置
         FogUtils.appIdToGeoCoverageMap.put(application.getAppId(), application.getGeoCoverage());
         //把之前的 生成的 系统逻辑架构图 放进来
         getApplications().put(application.getAppId(), application);
@@ -243,14 +247,18 @@ public class Controller extends SimEntity {
         getApplications().put(application.getAppId(), application);
 
         ModulePlacement modulePlacement = getAppModulePlacementPolicy().get(application.getAppId());
+
         for (FogDevice fogDevice : fogDevices) {
+            //发出 设备激活事件
             sendNow(fogDevice.getId(), FogEvents.ACTIVE_APP_UPDATE, application);
         }
-
+        //拿到设备上虚拟机放置策略
         Map<Integer, List<AppModule>> deviceToModuleMap = modulePlacement.getDeviceToModuleMap();
         for (Integer deviceId : deviceToModuleMap.keySet()) {
             for (AppModule module : deviceToModuleMap.get(deviceId)) {
+                //虚拟机提交事件
                 sendNow(deviceId, FogEvents.APP_SUBMIT, application);
+                //发出虚拟机启动事件
                 sendNow(deviceId, FogEvents.LAUNCH_MODULE, module);
             }
         }

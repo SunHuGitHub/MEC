@@ -118,6 +118,7 @@ public class CloudSim {
 	 */
 	public static void init(int numUser, Calendar cal, boolean traceFlag) {
 		try {
+			//这里面 new 了 一个 CloudSimShutdown 对象
 			initCommonVariable(cal, traceFlag, numUser);
 
 			// create a GIS object
@@ -355,7 +356,7 @@ public class CloudSim {
 
 	// The two standard predicates
 
-	/** A standard predicate that matches any event. */
+	/** A standard predicate that matches any event. 匹配任何事件*/
 	public final static PredicateAny SIM_ANY = new PredicateAny();
 
 	/** A standard predicate that does not match any events. */
@@ -503,7 +504,7 @@ public class CloudSim {
 
 	/**
 	 * Internal method used to run one tick of the simulation. This method should <b>not</b> be
-	 * called in simulations.
+	 * called in simulations. 在仿真中不应调用此方法？？？？
 	 * 
 	 * @return true, if successful otherwise
 	 */
@@ -512,10 +513,12 @@ public class CloudSim {
 		boolean queue_empty;
 		
 		int entities_size = entities.size();
-
+		//循环调用SimEntity.run()方法
 		for (int i = 0; i < entities_size; i++) {
 			ent = entities.get(i);
+			//SimEntity state初始化就是 RUNNABLE
 			if (ent.getState() == SimEntity.RUNNABLE) {
+				//如果第一次进来 没什么用
 				ent.run();
 			}
 		}
@@ -651,6 +654,7 @@ public class CloudSim {
 		Iterator<SimEvent> iterator = deferred.iterator();
 		while (iterator.hasNext()) {
 			event = iterator.next();
+			//由于是PredicateAny 所以 后半段判断恒为true 只需关注  event.getDestination() == d 这个就好
 			if ((event.getDestination() == d) && (p.match(event))) {
 				count++;
 			}
@@ -758,6 +762,7 @@ public class CloudSim {
 		clock = e.eventTime();
 
 		// Ok now process it
+		//拿到new SimEvent 时传进去的SimEvent 事件类型  一般都是 SimEvent.SEND
 		switch (e.getType()) {
 			case SimEvent.ENULL:
 				throw new IllegalArgumentException("Event has a null type.");
@@ -769,12 +774,15 @@ public class CloudSim {
 
 			case SimEvent.SEND:
 				// Check for matching wait
+				// 拿到目的地 id
 				dest = e.getDestination();
 				if (dest < 0) {
 					throw new IllegalArgumentException("Attempt to send to a null entity detected.");
 				} else {
 					int tag = e.getTag();
+					// 根据id  拿到目的地 SimEntity
 					dest_ent = entities.get(dest);
+					// 判断目的地的状态是否等于WAITING 一开始都是Running状态
 					if (dest_ent.getState() == SimEntity.WAITING) {
 						Integer destObj = Integer.valueOf(dest);
 						Predicate p = waitPredicates.get(destObj);
@@ -786,6 +794,7 @@ public class CloudSim {
 							deferred.addEvent(e);
 						}
 					} else {
+						//如果不是WAITING状态 则 加入延迟队列
 						deferred.addEvent(e);
 					}
 				}
@@ -812,6 +821,7 @@ public class CloudSim {
 	public static void runStart() {
 		running = true;
 		// Start all the entities
+		//调用各个SimEntity的startEntity()方法
 		for (SimEntity ent : entities) {
 			ent.startEntity();
 		}

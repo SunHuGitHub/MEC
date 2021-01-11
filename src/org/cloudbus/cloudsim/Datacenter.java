@@ -1028,14 +1028,18 @@ public class Datacenter extends SimEntity {
 		// this resource should register to regional GIS.
 		// However, if not specified, then register to system GIS (the
 		// default CloudInformationService) entity.
+		// 这里regionalCisName 是为 null 的
 		int gisID = CloudSim.getEntityId(regionalCisName);
 		if (gisID == -1) {
+			//拿到 CloudInformationService 的 id  这里 因为 CloudInformationService 是第二个 new 出来的 所以 为 1
 			gisID = CloudSim.getCloudInfoServiceEntityId();
 		}
 
 		// send the registration to GIS
+		//        1                         2
 		sendNow(gisID, CloudSimTags.REGISTER_RESOURCE, getId());
 		// Below method is for a child class to override
+		//空方法
 		registerOtherEntity();
 	}
 

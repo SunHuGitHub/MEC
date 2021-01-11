@@ -10,7 +10,7 @@ package org.cloudbus.cloudsim.core.predicates;
 
 import org.cloudbus.cloudsim.core.SimEvent;
 
-/**
+/** 继承自 Predicate 与延迟队列中所有事件匹配 即 选择所有事件
  * A predicate which will match any event on the deferred event queue. There is a publicly
  * accessible instance of this predicate in <code>Simulation</code>, called
  * <code>Simulation.SIM_ANY</code>, so no new instances need to be created. <br>

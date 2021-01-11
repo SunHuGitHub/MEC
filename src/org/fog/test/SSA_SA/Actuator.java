@@ -63,6 +63,7 @@ public class Actuator extends SimEntity {
 
     @Override
     public void startEntity() {
+        //         父id                 执行器加入事件          延迟 这里的延迟作为data 传了进去
         sendNow(gatewayDeviceId, FogEvents.ACTUATOR_JOINED, getLatency());
     }
 

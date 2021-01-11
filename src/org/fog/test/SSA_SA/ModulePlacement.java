@@ -50,9 +50,25 @@ public class ModulePlacement extends Placement {
         setActuators(actuators);
         this.moduleToPlace = moduleToPlace;
         this.deviceMipsInfo = new HashMap<>();
-
+        //重要的是这步 分配虚拟机
         mapModules();
     }
+
+    public ModulePlacement(List<FogDevice> fogDevices, List<Sensor> sensors, List<Actuator> actuators,
+                           Application application, ModuleMapping moduleMapping) {
+        this.setFogDevices(fogDevices);
+        this.setApplication(application);
+        this.setModuleMapping(moduleMapping);
+        this.setModuleToDeviceMap(new HashMap<>());
+        this.setDeviceToModuleMap(new HashMap<>());
+        setSensors(sensors);
+        setActuators(actuators);
+        this.deviceMipsInfo = new HashMap<>();
+        //重要的是这步 分配虚拟机
+        mapModules();
+    }
+
+
 
     @Override
     protected void mapModules() {
@@ -67,10 +83,10 @@ public class ModulePlacement extends Placement {
                 List<AppModule> placesModules;
                 if (!getDeviceToModuleMap().containsKey(deviceId)) {
                     placesModules = new ArrayList<>();
-                    //这里是真正的设备与虚拟机分配关系 使用 deviceToModuleMap属性 来保存
                 } else {
                     placesModules = getDeviceToModuleMap().get(deviceId);
                 }
+                //这里是真正的设备与虚拟机分配关系 使用 deviceToModuleMap属性 来保存
                 placesModules.add(appModule);
                 getDeviceToModuleMap().put(deviceId, placesModules);
             }
