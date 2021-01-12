@@ -742,6 +742,7 @@ public class FogDevice extends PowerDatacenter {
             for (String _moduleName : module.getDownInstanceIdsMaps().keySet()) {
                 instances = Math.max(module.getDownInstanceIdsMaps().get(_moduleName).size(), instances);
             }
+            
             module.setNumInstances(instances);
         }
 
