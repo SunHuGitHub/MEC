@@ -119,10 +119,12 @@ public class SimEvent implements Cloneable, Comparable<SimEvent> {
 	public int compareTo(SimEvent event) {
 		if (event == null) {
 			return 1;
+			//首先按时间排序 时间大的放在后面
 		} else if (time < event.time) {
 			return -1;
 		} else if (time > event.time) {
 			return 1;
+			//如果时间相等，按照serial批次排序
 		} else if (serial < event.serial) {
 			return -1;
 		} else if (this == event) {

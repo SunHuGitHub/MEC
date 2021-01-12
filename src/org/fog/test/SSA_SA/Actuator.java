@@ -71,15 +71,19 @@ public class Actuator extends SimEntity {
     public void processEvent(SimEvent ev) {
         switch (ev.getTag()) {
             case FogEvents.TUPLE_ARRIVAL:
+                //接收到事件 调用 processTupleArrival 方法
                 processTupleArrival(ev);
                 break;
         }
     }
 
     private void processTupleArrival(SimEvent ev) {
+        //拿到任务
         Tuple tuple = (Tuple) ev.getData();
         Logger.debug(getName(), "Received tuple " + tuple.getCloudletId() + "on " + tuple.getDestModuleName());
+        //源 moduleName
         String srcModule = tuple.getSrcModuleName();
+        //目标 moduleName
         String destModule = tuple.getDestModuleName();
         Application app = getApp();
 

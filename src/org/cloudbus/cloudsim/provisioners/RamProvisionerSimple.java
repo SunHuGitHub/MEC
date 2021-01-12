@@ -16,6 +16,7 @@ import org.cloudbus.cloudsim.Vm;
 /**
  * RamProvisionerSimple is an extension of RamProvisioner which uses a best-effort policy to
  * allocate memory to a VM.
+ * RamProvisionerSimple是RamProvisioner的扩展，它使用尽力而为策略为VM分配内存。
  * 
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov

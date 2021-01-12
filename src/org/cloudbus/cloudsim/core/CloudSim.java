@@ -217,6 +217,7 @@ public class CloudSim {
 	 */
 	public static void stopSimulation() throws NullPointerException {
 		try {
+			//打印结束日志
 			runStop();
 		} catch (IllegalArgumentException e) {
 			throw new NullPointerException("CloudSim.stopCloudSimulation() : "
@@ -546,7 +547,7 @@ public class CloudSim {
 					trymore = false;
 				}
 			}
-
+			//移除future队列中事件 等于 first 事件时间的事件
 			future.removeAll(toRemove);
 
 		} else {

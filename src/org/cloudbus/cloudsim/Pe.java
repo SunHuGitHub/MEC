@@ -12,9 +12,10 @@ import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 
 /**
  * CloudSim Pe (Processing Element) class represents CPU unit, defined in terms of Millions
+ * Pe表示CPU单元，以每秒数百万条指令（MIPS）等级定义。
  * Instructions Per Second (MIPS) rating.<br>
  * <b>ASSUMPTION:<b> All PEs under the same Machine have the same MIPS rating.
- * 
+ * 一台机器上的每个CPU单元拥有相同的处理能力
  * @author Manzur Murshed
  * @author Rajkumar Buyya
  * @since CloudSim Toolkit 1.0

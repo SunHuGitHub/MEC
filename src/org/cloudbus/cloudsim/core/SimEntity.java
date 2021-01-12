@@ -408,6 +408,7 @@ public abstract class SimEntity implements Cloneable {
 		SimEvent ev = evbuf != null ? evbuf : getNextEvent();
 
 		while (ev != null) {
+			//这里处理事件  主要是 FogDevice DataCenter Sensor Actuator Controller 的 processEvent 方法
 			processEvent(ev);
 			if (state != RUNNABLE) {
 				break;

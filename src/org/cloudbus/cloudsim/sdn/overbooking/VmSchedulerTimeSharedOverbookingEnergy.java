@@ -18,6 +18,7 @@ import org.cloudbus.cloudsim.sdn.power.PowerUtilizationHistoryEntry;
 import org.cloudbus.cloudsim.sdn.power.PowerUtilizationInterface;
 
 /**
+ * 将 CPU 分给虚拟机
  * VmSchedulerSpaceShared is a VMM allocation policy that allocates one or more Pe to a VM, and
  * doesn't allow sharing of PEs. If there is no free PEs to the VM, allocation fails. Free PEs are
  * not allocated to VMs

@@ -17,7 +17,7 @@ import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 /**
  * BwProvisionerSimple is a class that implements a simple best effort allocation policy: if there
  * is bw available to request, it allocates; otherwise, it fails.
- * 
+ * BwProvisionerSimple是一个实现简单的尽力而为分配策略的类：如果有可用的bw分配给请求，它将分配；否则，它将失败。
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov
  * @since CloudSim Toolkit 1.0

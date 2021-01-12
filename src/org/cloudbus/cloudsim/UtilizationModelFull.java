@@ -11,7 +11,7 @@ package org.cloudbus.cloudsim;
 /**
  * The UtilizationModelFull class is a simple model, according to which a Cloudlet always utilize
  * all the available CPU capacity.
- * 
+ *  利用所有可用的CPU
  * @author Anton Beloglazov
  * @since CloudSim Toolkit 2.0
  */

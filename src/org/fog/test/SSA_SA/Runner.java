@@ -117,6 +117,7 @@ public class Runner {
                     （controller资源管理事件）、（结束模拟事件）、（FogDevice资源管理事件）你有几个FogDevice就有几个。
                     举例，一个mecServer + 一个ue + 一个Sensor + 一个 Actuator （mainModule,storageModule分给mecServer，clientModule分给 ue）
                     共有：2 + 2（Sensor） + 1（Actuator） + 2 + （2 * 2 + 2）+ 1 + 1 + 2 = 17
+                    这么多事件排序 是按照SimEvent中 compareTo方法来排序 先按时间排序，大的放后面，事件相等就按照serial批次来排序
             }->
 
             */
@@ -235,7 +236,7 @@ public class Runner {
     private static FogDevice createFogDevice(String nodeName, long mips,
                                              int ram, long upBw, long downBw, int level, double ratePerMips, double busyPower, double idlePower) {
         List<Pe> peList = new ArrayList<Pe>();
-
+        //一个设备上可以有多个CPU 所有用 peList 来存
         peList.add(new Pe(0, new PeProvisionerOverbooking(mips)));
         int hostId = FogUtils.generateEntityId();
         long storage = 1000000;

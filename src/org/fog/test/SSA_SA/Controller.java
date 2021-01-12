@@ -107,16 +107,22 @@ public class Controller extends SimEntity {
                 processAppSubmit(ev);
                 break;
             case FogEvents.TUPLE_FINISHED:
+                //空方法
                 processTupleFinished(ev);
                 break;
             case FogEvents.CONTROLLER_RESOURCE_MANAGE:
+                //发出资源更新事件
                 manageResources();
                 break;
             case FogEvents.STOP_SIMULATION:
                 CloudSim.stopSimulation();
+                //打印时间统计
                 printTimeDetails();
+                //打印能耗统计
                 printPowerDetails();
+                //打印费用统计
                 printCostDetails();
+                //打印网络资源统计
                 printNetworkUsageDetails();
                 System.exit(0);
                 break;
@@ -130,7 +136,7 @@ public class Controller extends SimEntity {
 
     private FogDevice getCloud() {
         for (FogDevice dev : getFogDevices())
-            if (dev.getName().equals("cloud"))
+            if (dev.getName().equals("mecServer"))
                 return dev;
         return null;
     }
@@ -165,6 +171,7 @@ public class Controller extends SimEntity {
         System.out.println("APPLICATION LOOP DELAYS");
         System.out.println("=========================================");
         for (Integer loopId : TimeKeeper.getInstance().getLoopIdToTupleIds().keySet()) {
+            //作者自己注释的
 			/*double average = 0, count = 0;
 			for(int tupleId : TimeKeeper.getInstance().getLoopIdToTupleIds().get(loopId)){
 				Double startTime = 	TimeKeeper.getInstance().getEmitTimes().get(tupleId);
@@ -189,6 +196,7 @@ public class Controller extends SimEntity {
     }
 
     protected void manageResources() {
+        //发出资源更新 事件
         send(getId(), Config.RESOURCE_MANAGE_INTERVAL, FogEvents.CONTROLLER_RESOURCE_MANAGE);
     }
 

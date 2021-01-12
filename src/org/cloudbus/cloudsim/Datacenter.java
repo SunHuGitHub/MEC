@@ -251,6 +251,7 @@ public class Datacenter extends SimEntity {
 
 			// other unknown tags are processed by this method
 			default:
+				//这里主要是为了调用 FogDevice里 processOtherEvent 方法  Datacenter里这个方法 空方法
 				processOtherEvent(ev);
 				break;
 		}

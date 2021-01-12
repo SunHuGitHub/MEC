@@ -232,6 +232,7 @@ public class FogDevice extends PowerDatacenter {
     @Override
     protected void processOtherEvent(SimEvent ev) {
         switch (ev.getTag()) {
+            //任务到来 处理任务
             case FogEvents.TUPLE_ARRIVAL:
                 processTupleArrival(ev);
                 break;
@@ -615,7 +616,8 @@ public class FogDevice extends PowerDatacenter {
     protected void processTupleArrival(SimEvent ev) {
         Tuple tuple = (Tuple) ev.getData();
 
-        if (getName().equals("cloud")) {
+        if (getName().equals("mecServer")) {
+            //更新传输时间
             updateCloudTraffic();
         }
 		
@@ -624,11 +626,12 @@ public class FogDevice extends PowerDatacenter {
 		}*/
         Logger.debug(getName(), "Received tuple " + tuple.getCloudletId() + "with tupleType = " + tuple.getTupleType() + "\t| Source : " +
                 CloudSim.getEntityName(ev.getSource()) + "|Dest : " + CloudSim.getEntityName(ev.getDestination()));
+        //发出TUPLE_ACK事件
         send(ev.getSource(), CloudSim.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
 
-        if (FogUtils.appIdToGeoCoverageMap.containsKey(tuple.getAppId())) {
-        }
-
+//        if (FogUtils.appIdToGeoCoverageMap.containsKey(tuple.getAppId())) {
+//        }
+        //如果任务的目的地是ACTUATOR 则把任务发给执行器
         if (tuple.getDirection() == Tuple.ACTUATOR) {
             sendTupleToActuator(tuple);
             return;
@@ -637,6 +640,7 @@ public class FogDevice extends PowerDatacenter {
         if (getHost().getVmList().size() > 0) {
             final AppModule operator = (AppModule) getHost().getVmList().get(0);
             if (CloudSim.clock() > 0) {
+                //分配 CPU 资源给虚拟机
                 getHost().getVmScheduler().deallocatePesForVm(operator);
                 getHost().getVmScheduler().allocatePesForVm(operator, new ArrayList<Double>() {
                     protected static final long serialVersionUID = 1L;
@@ -649,7 +653,7 @@ public class FogDevice extends PowerDatacenter {
         }
 
 
-        if (getName().equals("cloud") && tuple.getDestModuleName() == null) {
+        if (getName().equals("mecServer") && tuple.getDestModuleName() == null) {
             sendNow(getControllerId(), FogEvents.TUPLE_FINISHED, null);
         }
 
@@ -667,9 +671,9 @@ public class FogDevice extends PowerDatacenter {
                 }
                 tuple.setVmId(vmId);
                 //Logger.error(getName(), "Executing tuple for operator " + moduleName);
-
+                //更新收到任务后的时间
                 updateTimingsOnReceipt(tuple);
-
+                //处理任务
                 executeTuple(ev, tuple.getDestModuleName());
             } else if (tuple.getDestModuleName() != null) {
                 if (tuple.getDirection() == Tuple.UP)

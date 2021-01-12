@@ -32,20 +32,20 @@ public class Cloudlet {
 	private int userId;
 
 	/**
-	 * The size of this Cloudlet to be executed in a CloudResource (unit: in MI).
+	 * The size of this Cloudlet to be executed in a CloudResource (unit: in MI). 任务执行时的大小
 	 */
 	private long cloudletLength;
 
 	/**
 	 * The input file size of this Cloudlet before execution (unit: in byte). in byte = program +
-	 * input data size
+	 * input data size  任务执行前的 输入大小
 	 */
 	private final long cloudletFileSize;
 
-	/** The output file size of this Cloudlet after execution (unit: in byte). */
+	/** The output file size of this Cloudlet after execution (unit: in byte). 任务执行完输出数据大小  可以认为 任务执行完的结果*/
 	private final long cloudletOutputSize;
 
-	/** The num of Pe required to execute this job. */
+	/** The num of Pe required to execute this job.  任务所需的CPU数量 */
 	private int numberOfPes;
 
 	/** The cloudlet ID. */

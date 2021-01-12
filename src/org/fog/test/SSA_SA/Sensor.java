@@ -117,28 +117,32 @@ public class Sensor extends SimEntity {
 
     public void transmit() {
         AppEdge _edge = null;
+        //找到sensor对应的边
         for (AppEdge edge : getApp().getEdges()) {
             if (edge.getSource().equals(getTupleType()))
                 _edge = edge;
         }
         long cpuLength = (long) _edge.getTupleCpuLength();
         long nwLength = (long) _edge.getTupleNwLength();
-
+        //新建任务              cpuLength=真正执行的任务大小   pesNumber=任务处理所需CPU数量  nwLength=任务上传时的大小  outputSize=任务执行完的输出结果的大小
         Tuple tuple = new Tuple(getAppId(), FogUtils.generateTupleId(), Tuple.UP, cpuLength, 1, nwLength, outputSize,
                 new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
+        //设置userid
         tuple.setUserId(getUserId());
+        //设置任务类型
         tuple.setTupleType(getTupleType());
-
+        //设置目标AppModule名
         tuple.setDestModuleName(_edge.getDestination());
+        //设置源AppModule名
         tuple.setSrcModuleName(getSensorName());
         Logger.debug(getName(), "Sending tuple with tupleId = " + tuple.getCloudletId());
-
+        //设置实际id
         int actualTupleId = updateTimings(getSensorName(), tuple.getDestModuleName());
         tuple.setActualTupleId(actualTupleId);
-
+        //向父设备发送任务
         send(gatewayDeviceId, getLatency(), FogEvents.TUPLE_ARRIVAL, tuple);
     }
-
+    //修改时间
     private int updateTimings(String src, String dest) {
         Application application = getApp();
         for (AppLoop loop : application.getLoops()) {
@@ -161,17 +165,18 @@ public class Sensor extends SimEntity {
         //    父 id                   0.1 事件之间的间隔               感应器加入事件           地理位置--null 这里作为data传了进去
         send(gatewayDeviceId, CloudSim.getMinTimeBetweenEvents(), FogEvents.SENSOR_JOINED, geoLocation);
         //   感应器id        传输间隔 我们在 new Sensor 时传的             任务加入事件
-        // 这里的 send方法 没传 data  猜测这里我们可以修改 帮我们的任务传进去
         send(getId(), getTransmitDistribution().getNextValue(), FogEvents.EMIT_TUPLE);
     }
 
     @Override
     public void processEvent(SimEvent ev) {
         switch (ev.getTag()) {
+            //空操作
             case FogEvents.TUPLE_ACK:
                 //transmit(transmitDistribution.getNextValue());
                 break;
             case FogEvents.EMIT_TUPLE:
+                //接收到事件 调用 transmit 方法 传输任务
                 transmit();
                 send(getId(), getTransmitDistribution().getNextValue(), FogEvents.EMIT_TUPLE);
                 break;
