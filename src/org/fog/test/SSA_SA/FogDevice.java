@@ -673,7 +673,7 @@ public class FogDevice extends PowerDatacenter {
                 //Logger.error(getName(), "Executing tuple for operator " + moduleName);
                 //更新收到任务后的时间
                 updateTimingsOnReceipt(tuple);
-                //处理任务
+                //处理任务...
                 executeTuple(ev, tuple.getDestModuleName());
             } else if (tuple.getDestModuleName() != null) {
                 if (tuple.getDirection() == Tuple.UP)
@@ -742,7 +742,6 @@ public class FogDevice extends PowerDatacenter {
             for (String _moduleName : module.getDownInstanceIdsMaps().keySet()) {
                 instances = Math.max(module.getDownInstanceIdsMaps().get(_moduleName).size(), instances);
             }
-            
             module.setNumInstances(instances);
         }
 
