@@ -85,7 +85,7 @@ public class Runner {
             ModuleMapping moduleMapping = ModuleMapping.createModuleMapping();
 
             //这里把 storageModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
-            moduleMapping.addModuleToDevice("storageModule", "mecServer");
+//            moduleMapping.addModuleToDevice("storageModule", "mecServer");
             //这里把 mainModule（存储型虚拟机） 放到了 之前初始化的 边缘服务器上
             moduleMapping.addModuleToDevice("mainModule", "mecServer");
 
@@ -139,7 +139,7 @@ public class Runner {
         //初始化三种虚拟机配置  内存，每秒可以处理的百万指令数，大小？，带宽
         application.addAppModule("clientModule", 10, 1000, 1000, 100);
         application.addAppModule("mainModule", 50, 1500, 4000, 800);
-        application.addAppModule("storageModule", 10, 50, 12000, 100);
+//        application.addAppModule("storageModule", 10, 50, 12000, 100);
 
         //三种虚拟机之间的依赖关系  这里的关系 是用 边（AppEdge） 来表示的  看图 placement policy.png
         /*从 source -> destination 这里 source 为 IoTSensor 容易跟 tupleType 为 IoTSensor 造成误解
@@ -147,14 +147,14 @@ public class Runner {
         */
         application.addAppEdge("IoTSensor", "clientModule", 100, 200, "IoTSensor", Tuple.UP, AppEdge.SENSOR);
         application.addAppEdge("clientModule", "mainModule", 6000, 600, "RawData", Tuple.UP, AppEdge.MODULE);
-        application.addAppEdge("mainModule", "storageModule", 1000, 300, "StoreData", Tuple.UP, AppEdge.MODULE);
+//        application.addAppEdge("mainModule", "storageModule", 1000, 300, "StoreData", Tuple.UP, AppEdge.MODULE);
         application.addAppEdge("mainModule", "clientModule", 100, 50, "ResultData", Tuple.DOWN, AppEdge.MODULE);
         application.addAppEdge("clientModule", "IoTActuator", 100, 50, "Response", Tuple.DOWN, AppEdge.ACTUATOR);
 
         //数据（任务）经过虚拟机的流向  看图 placement policy.png
         application.addTupleMapping("clientModule", "IoTSensor", "RawData", new FractionalSelectivity(1.0));
         application.addTupleMapping("mainModule", "RawData", "ResultData", new FractionalSelectivity(1.0));
-        application.addTupleMapping("mainModule", "RawData", "StoreData", new FractionalSelectivity(1.0));
+//        application.addTupleMapping("mainModule", "RawData", "StoreData", new FractionalSelectivity(1.0));
         application.addTupleMapping("clientModule", "ResultData", "Response", new FractionalSelectivity(1.0));
 
         // 给终端设备 设置 时延期限 和 额外的计算要求  这里是为了之后分配虚拟机策略所用 没啥用 你也可以写你自己的

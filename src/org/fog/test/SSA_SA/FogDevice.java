@@ -236,18 +236,22 @@ public class FogDevice extends PowerDatacenter {
             case FogEvents.TUPLE_ARRIVAL:
                 processTupleArrival(ev);
                 break;
+            //创建虚拟机
             case FogEvents.LAUNCH_MODULE:
                 processModuleArrival(ev);
                 break;
+            //虚拟机迁移
             case FogEvents.RELEASE_OPERATOR:
                 processOperatorRelease(ev);
                 break;
+            //传感器加入事件
             case FogEvents.SENSOR_JOINED:
                 processSensorJoining(ev);
                 break;
             case FogEvents.SEND_PERIODIC_TUPLE:
                 sendPeriodicTuple(ev);
                 break;
+            //Application提交事件
             case FogEvents.APP_SUBMIT:
                 processAppSubmit(ev);
                 break;
@@ -257,6 +261,7 @@ public class FogDevice extends PowerDatacenter {
             case FogEvents.UPDATE_SOUTH_TUPLE_QUEUE:
                 updateSouthTupleQueue();
                 break;
+            //Application 激活事件
             case FogEvents.ACTIVE_APP_UPDATE:
                 updateActiveApplications(ev);
                 break;
