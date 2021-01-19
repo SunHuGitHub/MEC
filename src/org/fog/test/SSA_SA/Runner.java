@@ -137,25 +137,25 @@ public class Runner {
 
         Application application = Application.createApplication(appId, userId);
         //初始化三种虚拟机配置  内存，每秒可以处理的百万指令数，大小？，带宽
-        application.addAppModule("clientModule", 10, 1000, 1000, 100);
-        application.addAppModule("mainModule", 50, 1500, 4000, 800);
+        application.addAppModule("clientModule", 10, 1, 100, 100);
+        application.addAppModule("mainModule", 50, 2, 400, 200);
 //        application.addAppModule("storageModule", 10, 50, 12000, 100);
 
         //三种虚拟机之间的依赖关系  这里的关系 是用 边（AppEdge） 来表示的  看图 placement policy.png
         /*从 source -> destination 这里 source 为 IoTSensor 容易跟 tupleType 为 IoTSensor 造成误解
            这里其实叫什么都行 他这里是从逻辑上来说的 因为逻辑上就是从传感器到虚拟机。tupleType表示这条边主要传输任务类型为 IoTSensor 的数据
         */
-        application.addAppEdge("IoTSensor", "clientModule", 100, 200, "IoTSensor", Tuple.UP, AppEdge.SENSOR);
-        application.addAppEdge("clientModule", "mainModule", 6000, 600, "RawData", Tuple.UP, AppEdge.MODULE);
+        application.addAppEdge("IoTSensor", "clientModule", 1000, 1000, "IoTSensor", Tuple.UP, AppEdge.SENSOR);
+        application.addAppEdge("clientModule", "mainModule", 1000, 1000, "zzx", Tuple.UP, AppEdge.MODULE);
 //        application.addAppEdge("mainModule", "storageModule", 1000, 300, "StoreData", Tuple.UP, AppEdge.MODULE);
-        application.addAppEdge("mainModule", "clientModule", 100, 50, "ResultData", Tuple.DOWN, AppEdge.MODULE);
-        application.addAppEdge("clientModule", "IoTActuator", 100, 50, "Response", Tuple.DOWN, AppEdge.ACTUATOR);
+//        application.addAppEdge("mainModule", "clientModule", 0, 0, "ResultData", Tuple.DOWN, AppEdge.MODULE);
+//        application.addAppEdge("clientModule", "IoTActuator", 0, 0, "Response", Tuple.DOWN, AppEdge.ACTUATOR);
 
         //数据（任务）经过虚拟机的流向  看图 placement policy.png
-        application.addTupleMapping("clientModule", "IoTSensor", "RawData", new FractionalSelectivity(1.0));
-        application.addTupleMapping("mainModule", "RawData", "ResultData", new FractionalSelectivity(1.0));
+        application.addTupleMapping("clientModule", "IoTSensor", "zzx", new FractionalSelectivity(1.0));
+        application.addTupleMapping("mainModule", "zzx", "res", new FractionalSelectivity(1.0));
 //        application.addTupleMapping("mainModule", "RawData", "StoreData", new FractionalSelectivity(1.0));
-        application.addTupleMapping("clientModule", "ResultData", "Response", new FractionalSelectivity(1.0));
+//        application.addTupleMapping("clientModule", "ResultData", "Response", new FractionalSelectivity(1.0));
 
         // 给终端设备 设置 时延期限 和 额外的计算要求  这里是为了之后分配虚拟机策略所用 没啥用 你也可以写你自己的
 //        for (int id : idOfEndDevices) {
@@ -172,8 +172,8 @@ public class Runner {
             add("IoTSensor");
             add("clientModule");
             add("mainModule");
-            add("clientModule");
-            add("IoTActuator");
+//            add("clientModule");
+//            add("IoTActuator");
         }});
 
         List<AppLoop> loops = new ArrayList<AppLoop>() {{
@@ -211,7 +211,7 @@ public class Runner {
         deviceById.put(mecServer.getId(), mecServer);
 
         //初始化 移动设备
-        FogDevice ue = createFogDevice("ue", 3200, 1000, 10000, 270, 2, 0, 87.53, 82.44);
+        FogDevice ue = createFogDevice("ue", 3200, 1000, 10000, 270, 1, 0, 87.53, 82.44);
 
         ue.setUplinkLatency(2);
         fogDevices.add(ue);
@@ -227,10 +227,10 @@ public class Runner {
         sensor.setLatency(6.0);
 
         //初始化 执行器
-        Actuator actuator = new Actuator("ue-Actuator", userId, appId, "IoTActuator");
-        actuators.add(actuator);
-        actuator.setGatewayDeviceId(ue.getId());
-        actuator.setLatency(1.0);
+//        Actuator actuator = new Actuator("ue-Actuator", userId, appId, "IoTActuator");
+//        actuators.add(actuator);
+//        actuator.setGatewayDeviceId(ue.getId());
+//        actuator.setLatency(1.0);
     }
 
     private static FogDevice createFogDevice(String nodeName, long mips,

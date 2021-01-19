@@ -117,7 +117,7 @@ public class Sensor extends SimEntity {
 
     public void transmit() {
         AppEdge _edge = null;
-        //找到sensor对应的边
+        //找到sensor对应的边  根据 TupleType 发特定的任务
         for (AppEdge edge : getApp().getEdges()) {
             if (edge.getSource().equals(getTupleType()))
                 _edge = edge;
